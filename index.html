@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AgentPro - LIC Agent Portal</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+  <!-- Login / Role Screen -->
+  <div id="auth-screen" class="auth-overlay">
+    <div class="auth-card">
+      <h2>🏛️ AgentPro Login</h2>
+      <p>LIC Agent Management Portal</p>
+      <form id="login-form">
+        <input type="text" id="login-username" placeholder="Agent Name (e.g., Abiram)" required />
+        <select id="login-role">
+          <option value="Agent">Role: LIC Agent</option>
+          <option value="Manager">Role: Development Officer / Manager</option>
+          <option value="Admin">Role: Branch Admin</option>
+        </select>
+        <button type="submit" class="btn-primary">Enter Portal</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- App Container -->
+  <div class="app-container" id="app-container" style="display: none;">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">🏛️ AgentPro</div>
+      <ul class="nav-links">
+        <li class="active" data-target="dashboard"><i class="fas fa-chart-line"></i> Dashboard</li>
+        <li data-target="clients"><i class="fas fa-users"></i> Clients</li>
+        <li data-target="policies"><i class="fas fa-file-contract"></i> Policies</li>
+        <li data-target="premiums"><i class="fas fa-rupee-sign"></i> Premium Tracking</li>
+        <li data-target="commission"><i class="fas fa-calculator"></i> Commission</li>
+        <li data-target="renewals"><i class="fas fa-sync-alt"></i> Renewals</li>
+        <li data-target="claims"><i class="fas fa-hand-holding-heart"></i> Claims</li>
+        <li data-target="leads"><i class="fas fa-user-plus"></i> Leads</li>
+        <li data-target="reports"><i class="fas fa-file-alt"></i> Reports</li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="top-bar">
+        <button id="menu-toggle" class="menu-btn"><i class="fas fa-bars"></i></button>
+        <h3 id="page-title">Dashboard</h3>
+        <div class="user-info">
+          <span id="display-user">Welcome, Agent</span>
+          <button id="logout-btn" class="btn-outline">Logout</button>
+        </div>
+      </header>
+
+      <!-- 1. Dashboard -->
+      <section id="dashboard" class="page-section active">
+        <div class="kpi-grid">
+          <div class="kpi-card"><h4>Total Clients</h4><p id="kpi-clients">0</p></div>
+          <div class="kpi-card"><h4>Active Policies</h4><p id="kpi-policies">0</p></div>
+          <div class="kpi-card"><h4>Total Premiums</h4><p id="kpi-premiums">₹0</p></div>
+          <div class="kpi-card"><h4>Est. Commission</h4><p id="kpi-commission">₹0</p></div>
+        </div>
+        <div class="chart-box">
+          <canvas id="salesChart"></canvas>
+        </div>
+      </section>
+
+      <!-- 2. Clients -->
+      <section id="clients" class="page-section">
+        <div class="section-header">
+          <input type="text" id="client-search" placeholder="Search client by name or phone..." />
+          <button class="btn-primary" onclick="openClientModal()">+ Add Client</button>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr><th>ID</th><th>Name</th><th>Phone</th><th>Nominee</th><th>Medical History</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="clients-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 3. Policies -->
+      <section id="policies" class="page-section">
+        <div class="section-header">
+          <select id="policy-filter">
+            <option value="All">All Statuses</option>
+            <option value="Active">Active</option>
+            <option value="Pending">Pending</option>
+            <option value="Renewal Due">Renewal Due</option>
+            <option value="Lapsed">Lapsed</option>
+            <option value="Matured">Matured</option>
+          </select>
+          <button class="btn-primary" onclick="openPolicyModal()">+ Create Policy</button>
+        </div>
+        <div class="table-responsive">
+          <table>
+            <thead>
+              <tr><th>Policy ID</th><th>Client</th><th>Plan Type</th><th>Sum Assured</th><th>Premium</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody id="policies-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 4. Commission Calculator -->
+      <section id="commission" class="page-section">
+        <div class="calc-card">
+          <h3>LIC Agent Commission Calculator</h3>
+          <label>Premium Amount (₹):</label>
+          <input type="number" id="calc-premium" value="25000" />
+          <label>Policy Year:</label>
+          <select id="calc-year">
+            <option value="0.25">Year 1 (25%)</option>
+            <option value="0.15">Year 2 (15%)</option>
+            <option value="0.10">Year 3–5 (10%)</option>
+            <option value="0.05">Renewal Year 6+ (5%)</option>
+          </select>
+          <button class="btn-primary" onclick="calculateCommission()">Calculate Earnings</button>
+          <div class="calc-result" id="calc-output">Commission: ₹6,250</div>
+        </div>
+      </section>
+
+      <!-- Add remaining sections (#premiums, #renewals, #claims, #leads, #reports) following the same table/card pattern -->
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
